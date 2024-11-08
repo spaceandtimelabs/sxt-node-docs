@@ -89,6 +89,10 @@ docker run -it --rm \
 > Note: While the above references the `sxt-node:testnet-v0.53.0` docker image, this will change; please reference the "Resources" channel in the Testnet Nodes section of the [SXT Discord](https://discord.gg/spaceandtimeDB) or this [GitHub repository](https://github.com/orgs/spaceandtimelabs/packages/container/package/sxt-node) for the latest docker image.
 
 #### 1.2.3. Helm Chart
+
+> [!NOTE]
+> If you choose to use Docker instead of Kubernetes, you may skip this step.
+
 For installation on Kubernetes we have created a helm chart sxt-node-chart. Adding Helm repository with following command:
 
 ```bash
@@ -219,6 +223,9 @@ Please record the `HEX` and `SS58` format of public key from both outputs (total
 Please **also add any Discord handles that you want to join the testnet validator Discord channel.** Please also make sure that these Discord handles are already joining the SXT Discord server.
 
 ## III. Validator Setup Using Azure AKS
+
+If you choose to use Docker instead of AKS, go to [IV. Validator Setup Using Docker](#iv-validator-setup-using-docker)
+
 ### 3.1. Azure AKS Setup Requirements
 There are a few considerations when using Azure AKS to host SXT Testnet validator:
 
@@ -286,6 +293,9 @@ helm upgrade --install sxt-testnet-validator sxt-charts/sxt-node-chart --version
 In order for validator P2P traffic to have same inbound and outbound IP for the validator, one will need to follow the following [this document](https://learn.microsoft.com/en-us/azure/aks/load-balancer-standard#:~:text=Update%20the%20cluster%20with%20your,IDs%20of%20your%20public%20IPs.&text=The%20above%20command%20shows%20the,IDs%20from%20the%20previous%20command) from Microsoft to configure the AKS outbound LB to have matching IP address of the inbound P2P LB (acting like a TCP traffic proxy).
 
 ## IV. Validator Setup Using Docker
+
+If you choose to use AKS instead of Docker, go to [III. Validator Setup using AKS](#iii-validator-setup-using-azure-aks).
+
 Using Docker image we can launch the validator without deploying Kubernetes cluster like Azure AKS:
 
 Here we assume the setup uses the following locations: `$HOME/sxt-testnet/data` is the block storage folder, and `$HOME/sxt-validator-key` is the folder where the two formats of validator keys are located.
