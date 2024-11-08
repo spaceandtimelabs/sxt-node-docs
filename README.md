@@ -76,7 +76,7 @@ When each new docker image is released we will also be sharing the full `sha256`
 > Note: While the above references the `sxt-node:testnet-v0.53.0` docker image, this will change; please reference the "Resources" channel in the Testnet Nodes section of the [SXT Discord](https://discord.gg/spaceandtimeDB) or this [GitHub repository](https://github.com/orgs/spaceandtimelabs/packages/container/package/sxt-node) for the latest docker image.
 
 #### 1.2.2. Testnet Chainspecs
-SXT testnet chainspecs are part of the docker images mentioned in section 1.2.1. To inspect the chainspecs that comes with the docker image, please run the following:
+SXT testnet chainspecs are part of the docker images mentioned in [section 1.2.1](#121-docker-image). To inspect the chainspecs that comes with the docker image, please run the following:
 
 ```bash
 docker run -it --rm \
@@ -121,7 +121,7 @@ All key information should now be available from the return of the command.  Sto
 > Note: While the above references the `sxt-node:testnet-v0.53.0` docker image, this will change; please reference the "Resources" channel in the Testnet Nodes section of the [SXT Discord](https://discord.gg/spaceandtimeDB) or this [GitHub repository](https://github.com/orgs/spaceandtimelabs/packages/container/package/sxt-node) for the latest docker image.
 
 #### 1.4.2. Validator Keys
-Note that there are TWO keys required. First is a block assignment participation key in aura format, the other is finality voting key in gran format. Note that as mentioned in section 1.2.2, SXT testnet chainspecs is part of the docker image, located in `/opt/chainspecs/testnet-spec.json` inside the container.
+Note that there are TWO keys required. First is a block assignment participation key in aura format, the other is finality voting key in gran format. Note that as mentioned in [section 1.2.2](#122-testnet-chainspecs), SXT testnet chainspecs is part of the docker image, located in `/opt/chainspecs/testnet-spec.json` inside the container.
 
 We will first create a folder to place those key output files before running the command in docker with the folder mounted:
 
@@ -178,7 +178,7 @@ The generated key should now be in a file called `subkey.key` in the folder. Not
 By setting up the SXT Testnet node using provided binaries, chainspecs, and bootnodes, the node will be able to connect to the SXT Testnet and start syncing blocks. However, since the SXT Chain testnet will leverage a permissioned Proof of Authority, in order to become an actual validator on the SXT Testnet, additional steps as listed below are required:
 
 ### 2.1. Generate Public Key Addresses
-Similar to the two types of validator keys generated in section 1.4.2., the wallet seed phrase or secret seed that was created in section 1.4.1 can also be used to generate two different public keys that are associated with the two types of validator keys:
+Similar to the two types of validator keys generated in [section 1.4.2](#142-validator-keys), the wallet seed phrase or secret seed that was created in [section 1.4.1](#141-wallet-seed-phrase) can also be used to generate two different public keys that are associated with the two types of validator keys:
 
 The first CLI command uses schema `sr25519`, which creates public keys associated with the `aura` key:
 
@@ -214,7 +214,7 @@ Please record the `HEX` and `SS58` format of public key from both outputs (total
 > Note: While the above references the `sxt-node:testnet-v0.53.0` docker image, this will change; please reference the "Resources" channel in the Testnet Nodes section of the [SXT Discord](https://discord.gg/spaceandtimeDB) or this [GitHub repository](https://github.com/orgs/spaceandtimelabs/packages/container/package/sxt-node) for the latest docker image.
 
 ### 2.2. Submit Addresses and Confirm Testnet Validator Participation
-**Please send the public key addresses generated in section 2.1 to us** (testnet@spaceandtime.io), and we will share a Google sheet with the sender’s email address that has listed public addresses and testnet participation status confirmation.
+**Please send the public key addresses generated in [section 2.1](#21-generate-public-key-addresses) to us** (testnet@spaceandtime.io), and we will share a Google sheet with the sender’s email address that has listed public addresses and testnet participation status confirmation.
 
 Please **also add any Discord handles that you want to join the testnet validator Discord channel.** Please also make sure that these Discord handles are already joining the SXT Discord server.
 
@@ -226,12 +226,12 @@ There are a few considerations when using Azure AKS to host SXT Testnet validato
 
 1. Need to also allocate one Azure public IP (PIP) resource to be used by the validator node.
 
-1. Validator deployment should be on its own AKS node pool, and configure the helm chart with proper `nodeSelector` label. This dedicated node pool should have proper VM SKU as described in section 1.1.
+1. Validator deployment should be on its own AKS node pool, and configure the helm chart with proper `nodeSelector` label. This dedicated node pool should have proper VM SKU as described in [section 1.1](#11-system-specifications).
 
-1. The validator seed phrase or secret seed generated in section 1.4.1, as well as the node key generated in section 1.4.3 should both be installed into a single Kubernetes secret on the cluster within the same namespace where the SXT node helm chart would be installed.
+1. The validator seed phrase or secret seed generated in [section 1.4.1](#141-wallet-seed-phrase), as well as the node key generated in [section 1.4.3](#143-validator-node-key) should both be installed into a single Kubernetes secret on the cluster within the same namespace where the SXT node helm chart would be installed.
 
 ### 3.2. Configure Helm Values and Installation
-Assuming the helm repo of SXT node chart has been set up already as described in section 1.2.3. We can start preparing helm chart configuration values.yaml as follow:
+Assuming the helm repo of SXT node chart has been set up already as described in [section 1.2.3](#123-helm-chart). We can start preparing helm chart configuration values.yaml as follow:
 
 ```yaml
 ---
@@ -273,7 +273,7 @@ ingress-nginx:
 
 In this example configuration above, it is assumed that the helm will be deployed in namespace `sxt-testnet`, and the validator secret-seed (data key `Secret-Seed`) and node-key (data key `Node-Key`) will be in the kubernetes secret named `validator-data` within that namespace. As mentioned before, the SXT testnet chain chainspecs is distributed as part of the container, so the YAML entry `sxt.genesisPath` merely points to the chainspec that we will be using for the testnet.
 
-The two annotations for the dependency chart, `ingress-nginx`, are to specify the public ip (pip) allocated for the AKS cluster as discussed in section 2.1. The load-balancer resource group should point to the Azure resource group where the AKS belongs to. We also assigned a dedicated ingressClass for all traffic associated with this load-balancer. Finally, this example assumes that you have created a dedicated AKS node pool named `validator-nodepool` and the deployment will have a `nodeSelector` that selects nodes in the pool to deploy the validator.
+The two annotations for the dependency chart, `ingress-nginx`, are to specify the public ip (pip) allocated for the AKS cluster as discussed in [section 2.1](#21-generate-public-key-addresses). The load-balancer resource group should point to the Azure resource group where the AKS belongs to. We also assigned a dedicated ingressClass for all traffic associated with this load-balancer. Finally, this example assumes that you have created a dedicated AKS node pool named `validator-nodepool` and the deployment will have a `nodeSelector` that selects nodes in the pool to deploy the validator.
 
 Once the Helm configuration is done, we can now run the following command with proper `KUBECONFIG` to install the chart:
 
