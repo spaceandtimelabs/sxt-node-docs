@@ -162,11 +162,11 @@ A validator node key is used to create a node's peer id in order to uniquely ide
 ```bash
 mkdir -p $HOME/sxt-node-key && \
 docker run -it --rm \
---platform linux/amd64 \
--v $HOME/sxt-node-key:/sxtuser/sxt-node-key \
---entrypoint=/usr/local/bin/subkey \
-ghcr.io/spaceandtimelabs/sxt-node:testnet-v0.53.0 \
-generate-node-key --file /sxtuser/sxt-node-key/subkey.key
+  --platform linux/amd64 \
+  -v $HOME/sxt-node-key:/sxtuser/sxt-node-key \
+  --entrypoint=/usr/local/bin/subkey \
+  ghcr.io/spaceandtimelabs/sxt-node:testnet-v0.53.0 \
+  generate-node-key --file /sxtuser/sxt-node-key/subkey.key
 ```
 
 The generated key should now be in a file called `subkey.key` in the folder. Note that from the command line output it should also show you the peer id of the node.
@@ -312,7 +312,7 @@ docker run -d --restart always \
   --bootnodes "/dns/bootnode0.testnet.sxt.network/tcp/30333/p2p/12D3KooWDV5kmYUR5nxruFBfdGX2ZMR43iSe3SfmopZ3sLBFvZzc" \
   --bootnodes "/dns/bootnode1.testnet.sxt.network/tcp/30333/p2p/12D3KooWGAQAg7iZgyn8wnnT8nkDo9NVAPbfubpMgL1mYTRNgjdD" \
   --bootnodes "/dns/bootnode2.testnet.sxt.network/tcp/30333/p2p/12D3KooWLLf8tW3PPbj9MCda9rfypNN5xyZRi1bKoLj8s9UkeJDZ" \
-  ∂--validator \
+  --validator \
   --port 30333 \
   # only do the following if local RPC is desired
   --rpc-external \
