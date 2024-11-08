@@ -1,3 +1,12 @@
+## [0.1.2](https://github.com/spaceandtimelabs/sxt-node-docs/compare/v0.1.1...v0.1.2) (2024-11-08)
+
+
+### Bug Fixes
+
+* typo ([5ba7e5b](https://github.com/spaceandtimelabs/sxt-node-docs/commit/5ba7e5bfc672dad1315e894cc78b13b3522380b2))
+
+
+
 ## [0.1.1](https://github.com/spaceandtimelabs/sxt-node-docs/compare/v0.1.0...v0.1.1) (2024-11-08)
 
 
