@@ -316,7 +316,7 @@ docker run -d --restart always \
   --port 30333 \
   # only do the following if local RPC is desired
   --rpc-external \
-  --unsafe-external-rpc \
+  --unsafe-rpc-external \
   --rpc-methods unsafe \
   --rpc-cors all \
   --rpc-port 9944
@@ -358,7 +358,7 @@ services:
       --port 30333
 # only do the following if local RPC is desired
       --rpc-external
-      --unsafe-external-rpc
+      --unsafe-rpc-external
       --rpc-methods unsafe
       --rpc-cors all
       --rpc-port 9944
