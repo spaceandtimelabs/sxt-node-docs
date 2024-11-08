@@ -1,4 +1,8 @@
-# 0.1.0 (2024-11-07)
+## [0.1.1](https://github.com/spaceandtimelabs/sxt-node-docs/compare/v0.1.0...v0.1.1) (2024-11-08)
+
+
+
+# [0.1.0](https://github.com/spaceandtimelabs/sxt-node-docs/compare/fa1ccad18ff1f329dc28732eb879b7beab09fda6...v0.1.0) (2024-11-07)
 
 
 ### Features
