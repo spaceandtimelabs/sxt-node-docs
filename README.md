@@ -130,13 +130,12 @@ Note that there are TWO keys required. First is a block assignment participation
 We will first create a folder to place those key output files before running the command in docker with the folder mounted:
 
 ```bash
-mkdir -p $HOME/sxt-validator-key && \
 docker run -it --rm \
   --platform linux/amd64 \
-  -v $HOME/sxt-validator-key:/sxtuser/sxt-validator-key \
+  -v sxt-validator-key:/data \
   --entrypoint=/usr/local/bin/sxt-node \
   ghcr.io/spaceandtimelabs/sxt-node:testnet-v0.53.0 \
-  key insert --scheme sr25519 --keystore-path /sxtuser/sxt-validator-key \
+  key insert --scheme sr25519 --keystore-path /data \
   --chain /opt/chainspecs/testnet-spec.json --key-type aura \
   --suri "${SECRET_SEED}"
 ```
@@ -146,10 +145,10 @@ Similarly, the voting key generation is:
 ```bash
 docker run -it --rm \
   --platform linux/amd64 \
-  -v $HOME/sxt-validator-key:/sxtuser/sxt-validator-key \
+  -v sxt-validator-key:/data \
   --entrypoint=/usr/local/bin/sxt-node \
   ghcr.io/spaceandtimelabs/sxt-node:testnet-v0.53.0 \
-  key insert --scheme ed25519 --keystore-path /sxtuser/sxt-validator-key \
+  key insert --scheme ed25519 --keystore-path /data \
   --chain /opt/chainspecs/testnet-spec.json --key-type gran \
   --suri "${SECRET_SEED}"
 ```
@@ -164,13 +163,12 @@ Note that in addition to the `--key-type`, the `--scheme` is actually different 
 A validator node key is used to create a node's peer id in order to uniquely identify the node over the p2p network. We first create a folder where we want to store the node-key, then mount the folder into docker image and run the key generating command:
 
 ```bash
-mkdir -p $HOME/sxt-node-key && \
 docker run -it --rm \
   --platform linux/amd64 \
-  -v $HOME/sxt-node-key:/sxtuser/sxt-node-key \
+  -v sxt-node-key:/data \
   --entrypoint=/usr/local/bin/subkey \
   ghcr.io/spaceandtimelabs/sxt-node:testnet-v0.53.0 \
-  generate-node-key --file /sxtuser/sxt-node-key/subkey.key
+  generate-node-key --file /data/subkey.key
 ```
 
 The generated key should now be in a file called `subkey.key` in the folder. Note that from the command line output it should also show you the peer id of the node.
@@ -305,9 +303,9 @@ Finally, the location of the generated node key is stored at `$HOME/sxt-node-key
 ```bash
 docker run -d --restart always \
   --platform linux/amd64 \
-  -v $HOME/sxt-testnet/data:/data \
-  -v $HOME/sxt-validator-key:/key \
-  -v $HOME/sxt-node-key:/node-key \
+  -v sxt-testnet-data:/data \
+  -v sxt-validator-key:/key \
+  -v sxt-node-key:/node-key \
   -p 30333:30333/tcp \
   -p 9615:9615/tcp \
   -p 9944:9944/tcp \
@@ -349,9 +347,9 @@ services:
       - '9944:9944' # rpc
       - '30333:30333' # p2p
     volumes:
-      - $HOME/sxt-testnet/data:/data
-      - $HOME/sxt-validator-key:/key
-      - $HOME/sxt-node-key:/node-key
+      - sxt-testnet-data:/data
+      - sxt-validator-key:/key
+      - sxt-node-key:/node-key
     pid: host
     command: >
       --base-path /data
@@ -366,12 +364,19 @@ services:
       --bootnodes "/dns/bootnode2.testnet.sxt.network/tcp/30333/p2p/12D3KooWLLf8tW3PPbj9MCda9rfypNN5xyZRi1bKoLj8s9UkeJDZ"
       --validator
       --port 30333
-# only do the following if local RPC is desired
+      # only do the following if local RPC is desired
       --rpc-external
       --unsafe-rpc-external
       --rpc-methods unsafe
       --rpc-cors all
       --rpc-port 9944
+
+volumes:
+  sxt-testnet-data:
+  sxt-validator-key:
+    external: true
+  sxt-node-key:
+    external: true
 ```
 
 and then start the sxt-testnet-node with command below:
