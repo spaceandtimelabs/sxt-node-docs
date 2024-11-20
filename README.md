@@ -166,9 +166,9 @@ A validator node key is used to create a node's peer id in order to uniquely ide
 docker run -it --rm \
   --platform linux/amd64 \
   -v sxt-node-key:/data \
-  --entrypoint=/usr/local/bin/subkey \
+  --entrypoint=/usr/local/bin/sxt-node \
   ghcr.io/spaceandtimelabs/sxt-node:testnet-v0.53.0 \
-  generate-node-key --file /data/subkey.key
+  key generate-node-key --chain /opt/chainspecs/testnet-spec.json --file /data/subkey.key
 ```
 
 The generated key should now be in a file called `subkey.key` in the folder. Note that from the command line output it should also show you the peer id of the node.
