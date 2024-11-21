@@ -216,7 +216,7 @@ Please record the `HEX` and `SS58` format of public key from both outputs (total
 > Note: While the above references the `sxt-node:testnet-v0.53.0` docker image, this will change; please reference the "Resources" channel in the Testnet Nodes section of the [SXT Discord](https://discord.gg/spaceandtimeDB) or this [GitHub repository](https://github.com/orgs/spaceandtimelabs/packages/container/package/sxt-node) for the latest docker image.
 
 ### 2.2. Submit Addresses and Confirm Testnet Validator Participation
-**Please send the public key addresses generated in [section 2.1](#21-generate-public-key-addresses) to us** (testnet@spaceandtime.io). In this note, please **confirm that the Discord handles affiliated with your team have already joined the SXT Discord.**. Once keys are submitted and handles have been assigned the testnet NOP role, coordinate with the Space and Time team in Discord to get permissioned!
+**Please send the public key addresses generated in [section 2.1](#21-generate-public-key-addresses) to us** (testnet@spaceandtime.io). In this note, please **confirm that the Discord handles affiliated with your team have already joined the [SXT Discord](https://discord.gg/spaceandtimeDB)**. Once keys are submitted and handles have been assigned the testnet NOP role, coordinate with the Space and Time team in Discord to get permissioned!
 
 ## III. Validator Setup Using Azure AKS
 
