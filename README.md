@@ -294,8 +294,8 @@ If you choose to use AKS instead of Docker, go to [III. Validator Setup using AK
 
 Using Docker image we can launch the validator without deploying Kubernetes cluster like Azure AKS:
 
-Here we assume the setup uses the following locations: `$HOME/sxt-testnet/data` is the block storage folder, and `$HOME/sxt-validator-key` is the folder where the two formats of validator keys are located.
-Finally, the location of the generated node key is stored at `$HOME/sxt-node-key/subkey.key`.
+Here we assume the setup uses the following volumes: `sxt-testnet-data` is the block storage volume, and `sxt-validator-key` is the volume where the two formats of validator keys are located.
+Finally, the volume where the generated node key is stored is `sxt-node-key`.
 
 ### 4.1. Docker Run
 ```bash
