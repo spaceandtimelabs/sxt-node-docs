@@ -99,6 +99,23 @@ For installation on Kubernetes we have created a helm chart sxt-node-chart. Addi
 helm repo add sxt-charts https://spaceandtimelabs.github.io/sxt-node-helm-charts
 ```
 
+#### 1.2.4. Validator Snapshots
+
+To speed up the time it takes for a validator to sync up with the network, we have snapshots ready for consumption. You can download them with the following command:
+
+```bash
+wget https://opspublicblocks2hnsenabl.blob.core.windows.net/snapshots/2024-11-20/sxt-testnet.tar.gz
+wget https://opspublicblocks2hnsenabl.blob.core.windows.net/snapshots/2024-11-20/SHA256SUMS
+```
+
+> [!TIP]
+> Due to the size of the snapshot, it can take a while for `wget` to download its contents. Other tools can be used to speed that up, if your internet connection permits, e.g. `aria2c -s16 -x16 <url>`
+
+After that, verify the download checksum:
+```bash
+sha256sum -c SHA256SUMS
+```
+
 ### 1.3. Testnet Bootnodes
 Bootnodes on SXT networks are trusted peers on the network that a new node will first connect to and find more peers to download blocks from. The three bootnodes listed below are hosted by Space and Time:
 
@@ -216,7 +233,7 @@ Please record the `HEX` and `SS58` format of public key from both outputs (total
 > Note: While the above references the `sxt-node:testnet-v0.53.0` docker image, this will change; please reference the "Resources" channel in the Testnet Nodes section of the [SXT Discord](https://discord.gg/spaceandtimeDB) or this [GitHub repository](https://github.com/orgs/spaceandtimelabs/packages/container/package/sxt-node) for the latest docker image.
 
 ### 2.2. Submit Addresses and Confirm Testnet Validator Participation
-**Please send the public key addresses generated in [section 2.1](#21-generate-public-key-addresses) to us** (testnet@spaceandtime.io). In this note, please **confirm that the Discord handles affiliated with your team have already joined the SXT Discord.**. Once keys are submitted and handles have been assigned the testnet NOP role, coordinate with the Space and Time team in Discord to get permissioned!
+**Please send the public key addresses generated in [section 2.1](#21-generate-public-key-addresses) to us** (testnet@spaceandtime.io). In this note, please **confirm that the Discord handles affiliated with your team have already joined the [SXT Discord](https://discord.gg/spaceandtimeDB)**. Once keys are submitted and handles have been assigned the testnet NOP role, coordinate with the Space and Time team in Discord to get permissioned!
 
 ## III. Validator Setup Using Azure AKS
 
@@ -294,10 +311,31 @@ If you choose to use AKS instead of Docker, go to [III. Validator Setup using AK
 
 Using Docker image we can launch the validator without deploying Kubernetes cluster like Azure AKS:
 
-Here we assume the setup uses the following locations: `$HOME/sxt-testnet/data` is the block storage folder, and `$HOME/sxt-validator-key` is the folder where the two formats of validator keys are located.
-Finally, the location of the generated node key is stored at `$HOME/sxt-node-key/subkey.key`.
+Here we assume the setup uses the following volumes: `sxt-testnet-data` is the block storage volume, and `sxt-validator-key` is the volume where the two formats of validator keys are located.
+Finally, the volume where the generated node key is stored is `sxt-node-key`.
 
-### 4.1. Docker Run
+### 4.1 Copy snapshot
+
+To speed up initialization, it is recommended to download a snapshot of the data. Follow the instructions in [1.2.4 Validator Snapshots](#124-validator-snapshots)
+and then run the commands below:
+
+```bash
+# Stop validator if running
+docker ps -q --filter 'volume=sxt-testnet-data' | xargs --no-run-if-empty docker stop
+
+# Start a new temporary container and mount volume
+docker run -d -it --rm --name copy-data \
+  --platform linux/amd64 \
+  -v sxt-testnet-data:/data \
+  --entrypoint=/bin/bash ghcr.io/spaceandtimelabs/sxt-node:testnet-v0.53.0
+
+# Copy snapshot into container and extract data
+docker cp sxt-testnet.tar.gz copy-data:/data/chains
+docker exec -ti copy-data sh -c 'rm -rf /data/chains/sxt-testnet && tar xf /data/chains/sxt-testnet.tar.gz -C /data/chains && rm -f /data/chains/sxt-testnet.tar.gz'
+docker stop copy-data
+```
+
+### 4.2. Docker Run
 ```bash
 docker run -d --restart always \
   --platform linux/amd64 \
@@ -328,7 +366,7 @@ docker run -d --restart always \
   --rpc-port 9944
 ```
 
-### 4.2. Docker Compose
+### 4.3. Docker Compose
 Prepare a `docker-compose.yaml` file as follows:
 
 ```yaml
