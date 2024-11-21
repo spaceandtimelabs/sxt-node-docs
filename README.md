@@ -99,6 +99,23 @@ For installation on Kubernetes we have created a helm chart sxt-node-chart. Addi
 helm repo add sxt-charts https://spaceandtimelabs.github.io/sxt-node-helm-charts
 ```
 
+#### 1.2.4. Validator Snapshots
+
+To speed up the time it takes for a validator to sync up with the network, we have snapshots ready for consumption. You can download them with the following command:
+
+```bash
+wget https://opspublicblocks2hnsenabl.blob.core.windows.net/snapshots/2024-11-20/sxt-testnet.tar.gz
+wget https://opspublicblocks2hnsenabl.blob.core.windows.net/snapshots/2024-11-20/SHA256SUMS
+```
+
+> [!TIP]
+> Due to the size of the snapshot, it can take a while for `wget` to download its contents. Other tools can be used to speed that up, if your internet connection permits, e.g. `aria2c -s16 -x16 <url>`
+
+After that, verify the download checksum:
+```bash
+sha256sum -c SHA256SUMS
+```
+
 ### 1.3. Testnet Bootnodes
 Bootnodes on SXT networks are trusted peers on the network that a new node will first connect to and find more peers to download blocks from. The three bootnodes listed below are hosted by Space and Time:
 
