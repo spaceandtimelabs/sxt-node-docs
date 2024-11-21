@@ -314,7 +314,28 @@ Using Docker image we can launch the validator without deploying Kubernetes clus
 Here we assume the setup uses the following volumes: `sxt-testnet-data` is the block storage volume, and `sxt-validator-key` is the volume where the two formats of validator keys are located.
 Finally, the volume where the generated node key is stored is `sxt-node-key`.
 
-### 4.1. Docker Run
+### 4.1 Copy snapshot
+
+To speed up initialization, it is recommended to download a snapshot of the data. Follow the instructions in [1.2.4 Validator Snapshots](#124-validator-snapshots)
+and then run the commands below:
+
+```bash
+# Stop validator if running
+docker ps -q --filter 'volume=sxt-testnet-data' | xargs --no-run-if-empty docker stop
+
+# Start a new temporary container and mount volume
+docker run -d -it --rm --name copy-data \
+  --platform linux/amd64 \
+  -v sxt-testnet-data:/data \
+  --entrypoint=/bin/bash ghcr.io/spaceandtimelabs/sxt-node:testnet-v0.53.0
+
+# Copy snapshot into container and extract data
+docker cp sxt-testnet.tar.gz copy-data:/data/chains
+docker exec -ti copy-data sh -c 'rm -rf /data/chains/sxt-testnet && tar xf /data/chains/sxt-testnet.tar.gz -C /data/chains && rm -f /data/chains/sxt-testnet.tar.gz'
+docker stop copy-data
+```
+
+### 4.2. Docker Run
 ```bash
 docker run -d --restart always \
   --platform linux/amd64 \
@@ -345,7 +366,7 @@ docker run -d --restart always \
   --rpc-port 9944
 ```
 
-### 4.2. Docker Compose
+### 4.3. Docker Compose
 Prepare a `docker-compose.yaml` file as follows:
 
 ```yaml
