@@ -104,8 +104,8 @@ helm repo add sxt-charts https://spaceandtimelabs.github.io/sxt-node-helm-charts
 To speed up the time it takes for a validator to sync up with the network, we have snapshots ready for consumption. You can download them with the following command:
 
 ```bash
-wget https://opspublicblocks2hnsenabl.blob.core.windows.net/snapshots/2024-11-20/sxt-testnet.tar.gz
-wget https://opspublicblocks2hnsenabl.blob.core.windows.net/snapshots/2024-11-20/SHA256SUMS
+wget https://blocks.testnet.sxt.network/snapshots/2024-11-20/sxt-testnet.tar.gz
+wget https://blocks.testnet.sxt.network/snapshots/2024-11-20/SHA256SUMS
 ```
 
 > [!TIP]
