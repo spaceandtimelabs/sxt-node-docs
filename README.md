@@ -330,8 +330,9 @@ docker run -d -it --rm --name copy-data \
   --entrypoint=/bin/bash ghcr.io/spaceandtimelabs/sxt-node:testnet-v0.53.0
 
 # Copy snapshot into container and extract data
-docker cp sxt-testnet.tar.gz copy-data:/data/chains
-docker exec -ti copy-data sh -c 'rm -rf /data/chains/sxt-testnet && tar xf /data/chains/sxt-testnet.tar.gz -C /data/chains && rm -f /data/chains/sxt-testnet.tar.gz'
+docker exec -ti copy-data sh -c 'rm -rf /data/chains/sxt-testnet && mkdir -p /data/chains'
+docker cp sxt-testnet.tar.gz copy-data:/data/chains/
+docker exec -ti copy-data sh -c 'tar xf /data/chains/sxt-testnet.tar.gz -C /data/chains && rm -f /data/chains/sxt-testnet.tar.gz'
 docker stop copy-data
 ```
 
