@@ -410,6 +410,7 @@ services:
 
 volumes:
   sxt-testnet-data:
+    external: true
   sxt-validator-key:
     external: true
   sxt-node-key:
