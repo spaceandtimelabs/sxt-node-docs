@@ -361,6 +361,7 @@ docker run -d --restart always \
   --bootnodes "/dns/bootnode2.testnet.sxt.network/tcp/30333/p2p/12D3KooWLLf8tW3PPbj9MCda9rfypNN5xyZRi1bKoLj8s9UkeJDZ" \
   --validator \
   --port 30333 \
+  --log info \
   # only do the following if local RPC is desired
   --rpc-external \
   --unsafe-rpc-external \
@@ -403,6 +404,7 @@ services:
       --bootnodes "/dns/bootnode2.testnet.sxt.network/tcp/30333/p2p/12D3KooWLLf8tW3PPbj9MCda9rfypNN5xyZRi1bKoLj8s9UkeJDZ"
       --validator
       --port 30333
+      --log info
       # only do the following if local RPC is desired
       --rpc-external
       --unsafe-rpc-external
