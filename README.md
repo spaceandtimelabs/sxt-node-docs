@@ -107,6 +107,8 @@ To speed up the time it takes for a validator to sync up with the network, we ha
 wget https://blocks.testnet.sxt.network/snapshots/2024-11-20/sxt-testnet.tar.gz
 wget https://blocks.testnet.sxt.network/snapshots/2024-11-20/SHA256SUMS
 ```
+Alternatively, you can download the snapshot from the Stakecraft team's [dedicated page](https://services.stakecraft.com/docs/snapshots/substrate-sxt-snapshot)
+
 
 > [!TIP]
 > Due to the size of the snapshot, it can take a while for `wget` to download its contents. Other tools can be used to speed that up, if your internet connection permits, e.g. `aria2c -s16 -x16 <url>`
