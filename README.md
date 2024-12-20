@@ -140,6 +140,12 @@ docker run -it --rm \
 
 All key information should now be available from the return of the command.  Store the information in a safe place.
 
+> [!IMPORTANT]
+> To continue with the next steps, take the value of `Secret seed:` and save it as an environment variable:
+```bash
+export SECRET_SEED=0x... # place the value of your Secret seed here
+```
+
 > [!NOTE]
 > Note: While the above references the `sxt-node:testnet-v0.53.0` docker image, this will change; please reference the "Resources" channel in the Testnet Nodes section of the [SXT Discord](https://discord.gg/spaceandtimeDB) or this [GitHub repository](https://github.com/orgs/spaceandtimelabs/packages/container/package/sxt-node) for the latest docker image.
 
@@ -156,7 +162,7 @@ docker run -it --rm \
   ghcr.io/spaceandtimelabs/sxt-node:testnet-v0.53.0 \
   key insert --scheme sr25519 --keystore-path /data \
   --chain /opt/chainspecs/testnet-spec.json --key-type aura \
-  --suri "${SECRET_SEED}"
+  --suri "${SECRET_SEED?}"
 ```
 
 Similarly, the voting key generation is:
@@ -169,7 +175,7 @@ docker run -it --rm \
   ghcr.io/spaceandtimelabs/sxt-node:testnet-v0.53.0 \
   key insert --scheme ed25519 --keystore-path /data \
   --chain /opt/chainspecs/testnet-spec.json --key-type gran \
-  --suri "${SECRET_SEED}"
+  --suri "${SECRET_SEED?}"
 ```
 
 
@@ -206,7 +212,7 @@ The first CLI command uses schema `sr25519`, which creates public keys associate
 ```bash
 docker run -it --rm --platform linux/amd64 --entrypoint=/usr/local/bin/sxt-node \
   ghcr.io/spaceandtimelabs/sxt-node:testnet-v0.53.0 \
-  key inspect --scheme sr25519 "${SECRET_SEED}"
+  key inspect --scheme sr25519 "${SECRET_SEED?}"
 ```
 
 The second CLI command uses schema `ed25519`, which creates public keys associated with the `gran` key:
@@ -214,7 +220,7 @@ The second CLI command uses schema `ed25519`, which creates public keys associat
 ```bash
 docker run -it --rm --platform linux/amd64 --entrypoint=/usr/local/bin/sxt-node \
   ghcr.io/spaceandtimelabs/sxt-node:testnet-v0.53.0 \
-  key inspect --scheme ed25519 "${SECRET_SEED}"
+  key inspect --scheme ed25519 "${SECRET_SEED?}"
 ```
 
 Both commands will generate output that looks something like:
@@ -230,6 +236,9 @@ Secret Key URI `******` is account:
 ```
 
 Please record the `HEX` and `SS58` format of public key from both outputs (total 4 addresses). These are the public key addresses of your validator wallet.
+
+> [!IMPORTANT]
+> Do not share the contents of your secret seed with anyone.
 
 > [!NOTE]
 > Note: While the above references the `sxt-node:testnet-v0.53.0` docker image, this will change; please reference the "Resources" channel in the Testnet Nodes section of the [SXT Discord](https://discord.gg/spaceandtimeDB) or this [GitHub repository](https://github.com/orgs/spaceandtimelabs/packages/container/package/sxt-node) for the latest docker image.
