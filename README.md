@@ -253,7 +253,7 @@ If you choose to use Docker instead of AKS, go to [IV. Validator Setup Using Doc
 ### 3.1. Azure AKS Setup Requirements
 There are a few considerations when using Azure AKS to host SXT Testnet validator:
 
-1. Due to P2P traffic considerations (more on this in [section 3.3](#33-important-notes-on-p2p-traffics-on-azure-aks), Each AKS cluster can only host a single instance of SXT validator. Other node types may be able to share the same cluster.
+1. Due to P2P traffic considerations (more on this in [section 3.3](#33-important-notes-on-p2p-traffics-on-azure-aks)), Each AKS cluster can only host a single instance of SXT validator. Other node types may be able to share the same cluster.
 
 1. Need to also allocate one Azure public IP (PIP) resource to be used by the validator node.
 
