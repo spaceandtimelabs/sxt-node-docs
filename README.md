@@ -63,7 +63,7 @@ On Azure cloud, this is equivalent to SKU `Standard_L16as_v3` with storage SKU o
 
 ### 1.2. Downloads
 #### 1.2.1. Docker Image
-Assuming Docker Desktop is installed and working on your computer. The SXT Node Docker image can be downloaded with `docker pull` command or used directly with Helm chart.
+Assuming Docker Desktop is installed and working on your computer. The SXT Node Docker image can be downloaded with `docker pull` command.
 
 ```bash
 docker pull ghcr.io/spaceandtimelabs/sxt-node:testnet-v0.53.0
@@ -87,17 +87,6 @@ docker run -it --rm \
 
 > [!NOTE]
 > Note: While the above references the `sxt-node:testnet-v0.53.0` docker image, this will change; please reference the "Resources" channel in the Testnet Nodes section of the [SXT Discord](https://discord.gg/spaceandtimeDB) or this [GitHub repository](https://github.com/orgs/spaceandtimelabs/packages/container/package/sxt-node) for the latest docker image.
-
-#### 1.2.3. Helm Chart
-
-> [!NOTE]
-> If you choose to use Docker instead of Kubernetes, you may skip this step.
-
-For installation on Kubernetes we have created a helm chart sxt-node-chart. Adding Helm repository with following command:
-
-```bash
-helm repo add sxt-charts https://spaceandtimelabs.github.io/sxt-node-helm-charts
-```
 
 #### 1.2.4. Validator Snapshots
 
@@ -246,86 +235,12 @@ Please record the `HEX` and `SS58` format of public key from both outputs (total
 ### 2.2. Submit Addresses and Confirm Testnet Validator Participation
 **Please send the public key addresses generated in [section 2.1](#21-generate-public-key-addresses) to us** (testnet@spaceandtime.io). In this note, please **confirm that the Discord handles affiliated with your team have already joined the [SXT Discord](https://discord.gg/spaceandtimeDB)**. Once keys are submitted and handles have been assigned the testnet NOP role, coordinate with the Space and Time team in Discord to get permissioned!
 
-## III. Validator Setup Using Azure AKS
-
-If you choose to use Docker instead of AKS, go to [IV. Validator Setup Using Docker](#iv-validator-setup-using-docker)
-
-### 3.1. Azure AKS Setup Requirements
-There are a few considerations when using Azure AKS to host SXT Testnet validator:
-
-1. Due to P2P traffic considerations (more on this in [section 3.3](#33-important-notes-on-p2p-traffics-on-azure-aks)), Each AKS cluster can only host a single instance of SXT validator. Other node types may be able to share the same cluster.
-
-1. Need to also allocate one Azure public IP (PIP) resource to be used by the validator node.
-
-1. Validator deployment should be on its own AKS node pool, and configure the helm chart with proper `nodeSelector` label. This dedicated node pool should have proper VM SKU as described in [section 1.1](#11-system-specifications).
-
-1. The validator seed phrase or secret seed generated in [section 1.4.1](#141-wallet-seed-phrase), as well as the node key generated in [section 1.4.3](#143-validator-node-key) should both be installed into a single Kubernetes secret on the cluster within the same namespace where the SXT node helm chart would be installed.
-
-### 3.2. Configure Helm Values and Installation
-Assuming the helm repo of SXT node chart has been set up already as described in [section 1.2.3](#123-helm-chart). We can start preparing helm chart configuration values.yaml as follow:
-
-```yaml
----
-networkID: testnet
-
-sxt:
-  isValidator: true
-  image:
-    repository: ghcr.io/spaceandtimelabs/sxt-node
-    pullPolicy: IfNotPresent
-    tag: "testnet-v0.53.0"
-  genesisPath: "/opt/chainspecs/testnet-spec.json"
-  secret:
-    name: "validator-data"
-    key: "Secret-Seed"
-    nodeKey: "Node-Key"
-  nodeSelectors:
-    agentpool: validator-nodepool
-  resources:
-    storage: 4Ti
-    cpu: 13000m
-    memory: 24G
-
-ingress-nginx:
-  enabled: true
-  Controller:
-    Kind: DaemonSet
-    ingressClassByName: true
-    ingressClass: "nginxP2pSXT"
-    service:
-      annotations:
-        service.beta.kubernetes.io/azure-pip-name: "azure-pip-testnet-sandbox-wus2-1"
-        service.beta.kubernetes.io/azure-load-balancer-resource-group: "azure-rg-testnet-sandbox-wus2"
-  tcp:
-    "30333": "sxt-testnet/sxtnode-p2p-tcp-service:30333"
-  udp:
-    "30333": "sxt-testnet/sxtnode-p2p-udp-service:30333"
-```
-
-In this example configuration above, it is assumed that the helm will be deployed in namespace `sxt-testnet`, and the validator secret-seed (data key `Secret-Seed`) and node-key (data key `Node-Key`) will be in the kubernetes secret named `validator-data` within that namespace. As mentioned before, the SXT testnet chain chainspecs is distributed as part of the container, so the YAML entry `sxt.genesisPath` merely points to the chainspec that we will be using for the testnet.
-
-The two annotations for the dependency chart, `ingress-nginx`, are to specify the public ip (pip) allocated for the AKS cluster as discussed in [section 2.1](#21-generate-public-key-addresses). The load-balancer resource group should point to the Azure resource group where the AKS belongs to. We also assigned a dedicated ingressClass for all traffic associated with this load-balancer. Finally, this example assumes that you have created a dedicated AKS node pool named `validator-nodepool` and the deployment will have a `nodeSelector` that selects nodes in the pool to deploy the validator.
-
-Once the Helm configuration is done, we can now run the following command with proper `KUBECONFIG` to install the chart:
-
-```
-helm upgrade --install sxt-testnet-validator sxt-charts/sxt-node-chart --version=0.3.9 \
-  -n sxt-testnet --create-namespace -f ./values.yaml --dependency-update
-```
-
-### 3.3. Important Notes on P2P traffics on Azure AKS
-In order for validator P2P traffic to have same inbound and outbound IP for the validator, one will need to follow the following [this document](https://learn.microsoft.com/en-us/azure/aks/load-balancer-standard#:~:text=Update%20the%20cluster%20with%20your,IDs%20of%20your%20public%20IPs.&text=The%20above%20command%20shows%20the,IDs%20from%20the%20previous%20command) from Microsoft to configure the AKS outbound LB to have matching IP address of the inbound P2P LB (acting like a TCP traffic proxy).
-
-## IV. Validator Setup Using Docker
-
-If you choose to use AKS instead of Docker, go to [III. Validator Setup using AKS](#iii-validator-setup-using-azure-aks).
-
-Using Docker image we can launch the validator without deploying Kubernetes cluster like Azure AKS:
+## III. Validator Setup Using Docker
 
 Here we assume the setup uses the following volumes: `sxt-testnet-data` is the block storage volume, and `sxt-validator-key` is the volume where the two formats of validator keys are located.
 Finally, the volume where the generated node key is stored is `sxt-node-key`.
 
-### 4.1 Copy snapshot
+### 3.1 Copy snapshot
 
 To speed up initialization, it is recommended to download a snapshot of the data. Follow the instructions in [1.2.4 Validator Snapshots](#124-validator-snapshots)
 and then run the commands below:
@@ -347,7 +262,7 @@ docker exec -ti copy-data sh -c 'tar xf /data/chains/sxt-testnet.tar.gz -C /data
 docker stop copy-data
 ```
 
-### 4.2. Docker Run
+### 3.2. Docker Run
 ```bash
 docker run -d --restart always \
   --platform linux/amd64 \
@@ -379,7 +294,7 @@ docker run -d --restart always \
   --rpc-port 9944
 ```
 
-### 4.3. Docker Compose
+### 3.3. Docker Compose
 Prepare a `docker-compose.yaml` file as follows:
 
 ```yaml
