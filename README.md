@@ -287,6 +287,7 @@ docker run -d --restart always \
   --validator \
   --port 30333 \
   --log info \
+  --telemetry-url 'wss://telemetry.polkadot.io/submit/ 5' \
   --no-private-ipv4 \
   # only do the following if local RPC is desired
   --rpc-external \
@@ -332,6 +333,7 @@ services:
       --validator
       --port 30333
       --log info
+      --telemetry-url 'wss://telemetry.polkadot.io/submit/ 5'
       --no-private-ipv4
       # only do the following if local RPC is desired
       --rpc-external
