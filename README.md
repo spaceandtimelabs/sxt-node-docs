@@ -51,29 +51,29 @@ The minimum system requirements for running a SXT validator node are shown in th
 
 | Key | Value
 | --- | ---
-| CPU cores | 16
+| CPU cores | 8
 | CPU Architecture | amd64
-| Memory (GiB) | 128
-| Storage (TiB) | 1
+| Memory (GiB) | 32
+| Storage (GiB) | 512
 | Storage Type | SSD
 | OS | Linux
 
 
-On Azure cloud, this is equivalent to SKU `Standard_L16as_v3` with storage SKU of `PremiumV2_SSD`.
+On Azure cloud, this is equivalent to SKU `Standard_D8as_v5` with storage SKU of `PremiumV2_SSD`.
 
 ### 1.2. Downloads
 #### 1.2.1. Docker Image
 Assuming Docker Desktop is installed and working on your computer. The SXT Node Docker image can be downloaded with `docker pull` command.
 
 ```bash
-docker pull ghcr.io/spaceandtimelabs/sxt-node:testnet-v0.53.0
-docker images --digests ghcr.io/spaceandtimelabs/sxt-node:testnet-v0.53.0
+docker pull ghcr.io/spaceandtimelabs/sxt-node:0.89.1
+docker images --digests ghcr.io/spaceandtimelabs/sxt-node:0.89.1
 ```
 
 When each new docker image is released we will also be sharing the full `sha256` hash of the image. Please confirm that hash against the image pulled down by docker with an extra docker `images` argument `--digests` to make sure that you are pulling the right one.
 
 > [!NOTE]
-> Note: While the above references the `sxt-node:testnet-v0.53.0` docker image, this will change; please reference the "Resources" channel in the Testnet Nodes section of the [SXT Discord](https://discord.gg/spaceandtimeDB) or this [GitHub repository](https://github.com/orgs/spaceandtimelabs/packages/container/package/sxt-node) for the latest docker image.
+> Note: While the above references the `sxt-node:0.89.1` docker image, this will change; please reference the "Resources" channel in the Testnet Nodes section of the [SXT Discord](https://discord.gg/spaceandtimeDB) or this [GitHub repository](https://github.com/orgs/spaceandtimelabs/packages/container/package/sxt-node) for the latest docker image.
 
 #### 1.2.2. Testnet Chainspecs
 SXT testnet chainspecs are part of the docker images mentioned in [section 1.2.1](#121-docker-image). To inspect the chainspecs that come with the docker image, please run the following:
@@ -81,12 +81,12 @@ SXT testnet chainspecs are part of the docker images mentioned in [section 1.2.1
 ```bash
 docker run -it --rm \
   --platform linux/amd64 \
-  --entrypoint=bash ghcr.io/spaceandtimelabs/sxt-node:testnet-v0.53.0 \
+  --entrypoint=bash ghcr.io/spaceandtimelabs/sxt-node:0.89.1 \
   -c "cat /opt/chainspecs/testnet-spec.json"
 ```
 
 > [!NOTE]
-> Note: While the above references the `sxt-node:testnet-v0.53.0` docker image, this will change; please reference the "Resources" channel in the Testnet Nodes section of the [SXT Discord](https://discord.gg/spaceandtimeDB) or this [GitHub repository](https://github.com/orgs/spaceandtimelabs/packages/container/package/sxt-node) for the latest docker image.
+> Note: While the above references the `sxt-node:0.89.1` docker image, this will change; please reference the "Resources" channel in the Testnet Nodes section of the [SXT Discord](https://discord.gg/spaceandtimeDB) or this [GitHub repository](https://github.com/orgs/spaceandtimelabs/packages/container/package/sxt-node) for the latest docker image.
 
 #### 1.2.4. Validator Snapshots
 
@@ -123,7 +123,7 @@ Here we demonstrate generating common 12-words seed phrases for validator wallet
 ```bash
 docker run -it --rm \
   --platform linux/amd64 \
-  --entrypoint=/usr/local/bin/sxt-node ghcr.io/spaceandtimelabs/sxt-node:testnet-v0.53.0 \
+  --entrypoint=/usr/local/bin/sxt-node ghcr.io/spaceandtimelabs/sxt-node:0.89.1 \
   key generate -w 12
 ```
 
@@ -136,7 +136,7 @@ export SECRET_SEED=0x... # place the value of your Secret seed here
 ```
 
 > [!NOTE]
-> Note: While the above references the `sxt-node:testnet-v0.53.0` docker image, this will change; please reference the "Resources" channel in the Testnet Nodes section of the [SXT Discord](https://discord.gg/spaceandtimeDB) or this [GitHub repository](https://github.com/orgs/spaceandtimelabs/packages/container/package/sxt-node) for the latest docker image.
+> Note: While the above references the `sxt-node:0.89.1` docker image, this will change; please reference the "Resources" channel in the Testnet Nodes section of the [SXT Discord](https://discord.gg/spaceandtimeDB) or this [GitHub repository](https://github.com/orgs/spaceandtimelabs/packages/container/package/sxt-node) for the latest docker image.
 
 #### 1.4.2. Validator Keys
 Note that there are TWO keys required. First is a block assignment participation key in aura format, the other is finality voting key in gran format. Note that as mentioned in [section 1.2.2](#122-testnet-chainspecs), SXT testnet chainspecs are part of the docker image, located in `/opt/chainspecs/testnet-spec.json` inside the container.
@@ -148,7 +148,7 @@ docker run -it --rm \
   --platform linux/amd64 \
   -v sxt-validator-key:/data \
   --entrypoint=/usr/local/bin/sxt-node \
-  ghcr.io/spaceandtimelabs/sxt-node:testnet-v0.53.0 \
+  ghcr.io/spaceandtimelabs/sxt-node:0.89.1 \
   key insert --scheme sr25519 --keystore-path /data \
   --chain /opt/chainspecs/testnet-spec.json --key-type aura \
   --suri "${SECRET_SEED?}"
@@ -161,7 +161,7 @@ docker run -it --rm \
   --platform linux/amd64 \
   -v sxt-validator-key:/data \
   --entrypoint=/usr/local/bin/sxt-node \
-  ghcr.io/spaceandtimelabs/sxt-node:testnet-v0.53.0 \
+  ghcr.io/spaceandtimelabs/sxt-node:0.89.1 \
   key insert --scheme ed25519 --keystore-path /data \
   --chain /opt/chainspecs/testnet-spec.json --key-type gran \
   --suri "${SECRET_SEED?}"
@@ -171,7 +171,7 @@ docker run -it --rm \
 Note that in addition to the `--key-type`, the `--scheme` is actually different in these commands for different keys. The `${SECRET_SEED}` here is the seed phrase generated in 1.4.1.
 
 > [!NOTE]
-> Note: While the above references the `sxt-node:testnet-v0.53.0` docker image, this will change; please reference the "Resources" channel in the Testnet Nodes section of the [SXT Discord](https://discord.gg/spaceandtimeDB) or this [GitHub repository](https://github.com/orgs/spaceandtimelabs/packages/container/package/sxt-node) for the latest docker image.
+> Note: While the above references the `sxt-node:0.89.1` docker image, this will change; please reference the "Resources" channel in the Testnet Nodes section of the [SXT Discord](https://discord.gg/spaceandtimeDB) or this [GitHub repository](https://github.com/orgs/spaceandtimelabs/packages/container/package/sxt-node) for the latest docker image.
 
 #### 1.4.3. Validator Node Key
 A validator node key is used to create a node's peer id in order to uniquely identify the node over the p2p network. We first create a folder where we want to store the node-key, then mount the folder into docker image and run the key generating command:
@@ -181,14 +181,14 @@ docker run -it --rm \
   --platform linux/amd64 \
   -v sxt-node-key:/data \
   --entrypoint=/usr/local/bin/sxt-node \
-  ghcr.io/spaceandtimelabs/sxt-node:testnet-v0.53.0 \
+  ghcr.io/spaceandtimelabs/sxt-node:0.89.1 \
   key generate-node-key --chain /opt/chainspecs/testnet-spec.json --file /data/subkey.key
 ```
 
 The generated key should now be in a file called `subkey.key` in the folder. Note that from the command line output it should also show you the peer id of the node.
 
 > [!NOTE]
-> Note: While the above references the `sxt-node:testnet-v0.53.0` docker image, this will change; please reference the "Resources" channel in the Testnet Nodes section of the [SXT Discord](https://discord.gg/spaceandtimeDB) or this [GitHub repository](https://github.com/orgs/spaceandtimelabs/packages/container/package/sxt-node) for the latest docker image.
+> Note: While the above references the `sxt-node:0.89.1` docker image, this will change; please reference the "Resources" channel in the Testnet Nodes section of the [SXT Discord](https://discord.gg/spaceandtimeDB) or this [GitHub repository](https://github.com/orgs/spaceandtimelabs/packages/container/package/sxt-node) for the latest docker image.
 
 ### II. SXT Testnet Validator Onboarding
 By setting up the SXT Testnet node using provided binaries, chainspecs, and bootnodes, the node will be able to connect to the SXT Testnet and start syncing blocks. However, since the SXT Chain testnet will leverage a permissioned Proof of Authority, in order to become an actual validator on the SXT Testnet, additional steps as listed below are required:
@@ -200,7 +200,7 @@ The first CLI command uses schema `sr25519`, which creates public keys associate
 
 ```bash
 docker run -it --rm --platform linux/amd64 --entrypoint=/usr/local/bin/sxt-node \
-  ghcr.io/spaceandtimelabs/sxt-node:testnet-v0.53.0 \
+  ghcr.io/spaceandtimelabs/sxt-node:0.89.1 \
   key inspect --scheme sr25519 "${SECRET_SEED?}"
 ```
 
@@ -208,7 +208,7 @@ The second CLI command uses schema `ed25519`, which creates public keys associat
 
 ```bash
 docker run -it --rm --platform linux/amd64 --entrypoint=/usr/local/bin/sxt-node \
-  ghcr.io/spaceandtimelabs/sxt-node:testnet-v0.53.0 \
+  ghcr.io/spaceandtimelabs/sxt-node:0.89.1 \
   key inspect --scheme ed25519 "${SECRET_SEED?}"
 ```
 
@@ -230,7 +230,7 @@ Please record the `HEX` and `SS58` format of public key from both outputs (total
 > Do not share the contents of your secret seed with anyone.
 
 > [!NOTE]
-> Note: While the above references the `sxt-node:testnet-v0.53.0` docker image, this will change; please reference the "Resources" channel in the Testnet Nodes section of the [SXT Discord](https://discord.gg/spaceandtimeDB) or this [GitHub repository](https://github.com/orgs/spaceandtimelabs/packages/container/package/sxt-node) for the latest docker image.
+> Note: While the above references the `sxt-node:0.89.1` docker image, this will change; please reference the "Resources" channel in the Testnet Nodes section of the [SXT Discord](https://discord.gg/spaceandtimeDB) or this [GitHub repository](https://github.com/orgs/spaceandtimelabs/packages/container/package/sxt-node) for the latest docker image.
 
 ### 2.2. Submit Addresses and Confirm Testnet Validator Participation
 **Please send the public key addresses generated in [section 2.1](#21-generate-public-key-addresses) to us** (testnet@spaceandtime.io). In this note, please **confirm that the Discord handles affiliated with your team have already joined the [SXT Discord](https://discord.gg/spaceandtimeDB)**. Once keys are submitted and handles have been assigned the testnet NOP role, coordinate with the Space and Time team in Discord to get permissioned!
@@ -253,7 +253,7 @@ docker ps -q --filter 'volume=sxt-testnet-data' | xargs --no-run-if-empty docker
 docker run -d -it --rm --name copy-data \
   --platform linux/amd64 \
   -v sxt-testnet-data:/data \
-  --entrypoint=/bin/bash ghcr.io/spaceandtimelabs/sxt-node:testnet-v0.53.0
+  --entrypoint=/bin/bash ghcr.io/spaceandtimelabs/sxt-node:0.89.1
 
 # Copy snapshot into container and extract data
 docker exec -ti copy-data sh -c 'rm -rf /data/chains/sxt-testnet && mkdir -p /data/chains'
@@ -272,7 +272,7 @@ docker run -d --restart always \
   -p 30333:30333/tcp \
   -p 9615:9615/tcp \
   -p 9944:9944/tcp \
-  ghcr.io/spaceandtimelabs/sxt-node:testnet-v0.53.0 \
+  ghcr.io/spaceandtimelabs/sxt-node:0.89.1 \
   --base-path /data \
   --prometheus-port 9615 \
   --pool-limit 10240 \
@@ -305,7 +305,7 @@ services:
   sxt-testnet:
     platform: linux/amd64
     restart: unless-stopped
-    image: ghcr.io/spaceandtimelabs/sxt-node:testnet-v0.53.0
+    image: ghcr.io/spaceandtimelabs/sxt-node:0.89.1
     ports:
       - '9615:9615' # metrics
       - '9944:9944' # rpc
