@@ -275,6 +275,7 @@ docker run -d --restart always \
   ghcr.io/spaceandtimelabs/sxt-node:0.89.1 \
   --base-path /data \
   --prometheus-port 9615 \
+  --prometheus-external \
   --pool-limit 10240 \
   --pool-kbytes 1024000 \
   --chain /opt/chainspecs/testnet-spec.json \
@@ -286,6 +287,7 @@ docker run -d --restart always \
   --validator \
   --port 30333 \
   --log info \
+  --no-private-ipv4 \
   # only do the following if local RPC is desired
   --rpc-external \
   --unsafe-rpc-external \
@@ -318,6 +320,7 @@ services:
     command: >
       --base-path /data
       --prometheus-port 9615
+      --prometheus-external
       --pool-limit 10240
       --pool-kbytes 1024000
       --chain /opt/chainspecs/testnet-spec.json
@@ -329,6 +332,7 @@ services:
       --validator
       --port 30333
       --log info
+      --no-private-ipv4
       # only do the following if local RPC is desired
       --rpc-external
       --unsafe-rpc-external
