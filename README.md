@@ -139,7 +139,7 @@ export SECRET_SEED=0x... # place the value of your Secret seed here
 > Note: While the above references the `sxt-node:testnet-v0.53.0` docker image, this will change; please reference the "Resources" channel in the Testnet Nodes section of the [SXT Discord](https://discord.gg/spaceandtimeDB) or this [GitHub repository](https://github.com/orgs/spaceandtimelabs/packages/container/package/sxt-node) for the latest docker image.
 
 #### 1.4.2. Validator Keys
-Note that there are TWO keys required. First is a block assignment participation key in aura format, the other is finality voting key in gran format. Note that as mentioned in [section 1.2.2](#122-testnet-chainspecs), SXT testnet chainspecs is part of the docker image, located in `/opt/chainspecs/testnet-spec.json` inside the container.
+Note that there are TWO keys required. First is a block assignment participation key in aura format, the other is finality voting key in gran format. Note that as mentioned in [section 1.2.2](#122-testnet-chainspecs), SXT testnet chainspecs are part of the docker image, located in `/opt/chainspecs/testnet-spec.json` inside the container.
 
 We will first create a folder to place those key output files before running the command in docker with the folder mounted:
 
