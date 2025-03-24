@@ -76,7 +76,7 @@ When each new docker image is released we will also be sharing the full `sha256`
 > Note: While the above references the `sxt-node:testnet-v0.53.0` docker image, this will change; please reference the "Resources" channel in the Testnet Nodes section of the [SXT Discord](https://discord.gg/spaceandtimeDB) or this [GitHub repository](https://github.com/orgs/spaceandtimelabs/packages/container/package/sxt-node) for the latest docker image.
 
 #### 1.2.2. Testnet Chainspecs
-SXT testnet chainspecs are part of the docker images mentioned in [section 1.2.1](#121-docker-image). To inspect the chainspecs that comes with the docker image, please run the following:
+SXT testnet chainspecs are part of the docker images mentioned in [section 1.2.1](#121-docker-image). To inspect the chainspecs that come with the docker image, please run the following:
 
 ```bash
 docker run -it --rm \
@@ -127,7 +127,7 @@ docker run -it --rm \
   key generate -w 12
 ```
 
-All key information should now be available from the return of the command.  Store the information in a safe place.
+All key information should now be available from the return of the command. Store the information in a safe place.
 
 > [!IMPORTANT]
 > To continue with the next steps, take the value of `Secret seed:` and save it as an environment variable:
