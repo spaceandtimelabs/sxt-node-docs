@@ -222,7 +222,7 @@ docker run -d --restart always \
   --log info \
   --telemetry-url 'wss://telemetry.polkadot.io/submit/ 5' \
   --no-private-ipv4 \
-  --name ValidatorName
+  --name ValidatorName \
   # only do the following if local RPC is desired
   --rpc-external \
   --rpc-cors all \
@@ -269,6 +269,7 @@ services:
       --log info
       --telemetry-url 'wss://telemetry.polkadot.io/submit/ 5'
       --no-private-ipv4
+      --name ValidatorName
       # only do the following if local RPC is desired
       --rpc-external
       --rpc-cors all
