@@ -7,6 +7,15 @@
 * **Validator activities**: The SXT Chain is designed to witness and validate indexed data submitted by indexer nodes. While the current testnet phase only involves third-party validators (and not prover nodes quite yet), the SXT Chain ensures the integrity of data through cryptographic commitments—one special hash for each indexed table. As rows of data are inserted on the SXT Chain, the validators update these special hashes (commitments) and add them to each block. Ultimately, this proves/ensures that each table managed by the chain is cryptographically tamperproof.
 * **Data Integrity**: As the SXT Chain indexes data, it generates cryptographic hashes (commitments) that guarantee the underlying data tables remain untampered. These commitments are essential for later phases, where our SXT Chain prover nodes will employ our Proof of SQL protocol to validate the integrity of the indexed data during ZK-proven SQL execution for client queries.
 
+> [!IMPORTANT]
+> If you were a validator in the original SXT Testnet, you will need to start a new validator from scratch using the instructions below.
+
+## Noteworthy Mentions
+> [!IMPORTANT]
+> Traditionally Substrate networks rely on Substrate-compatible keys to register node operators and manage staking.
+> The new Space and Time Testnet does not use Substrate keys. Stakers and Node operators will only use Ethereum keys in an Ethereum wallet.
+> Stakers and node operators will use their Ethereum keys to interact with Space and Time's Staking and Messaging contracts. Transactions that take place in these contracts will then be reflected on-chain.
+
 ## I. Prerequisites
 
 #### Incentives and Expectations
@@ -25,15 +34,14 @@ You will only be able to access this channel list if you hold the “Testnet Nod
 ### 1.1. System Specifications
 The minimum system requirements for running a SXT validator node are shown in the table below:
 
-| Key | Value
-| --- | ---
-| CPU cores | 8
-| CPU Architecture | amd64
-| Memory (GiB) | 32
-| Storage (GiB) | 512
-| Storage Type | SSD
-| OS | Linux
-
+| Key              | Value |
+|------------------|-------|
+| CPU cores        | 8     |
+| CPU Architecture | amd64 |
+| Memory (GiB)     | 32    |
+| Storage (GiB)    | 512   |
+| Storage Type     | SSD   |
+| OS               | Linux |
 
 On Azure cloud, this is equivalent to SKU `Standard_D8as_v5` with storage SKU of `PremiumV2_SSD`.
 
@@ -75,6 +83,11 @@ Bootnodes on SXT networks are trusted peers on the network that a new node will 
 ### 1.4. Node Keys
 Because the SxT Chain relies on EVM contracts for staking, node operators will need an Ethereum wallet (or Sepolia for Testnet) to interact with the staking contracts. The wallet you're using should have at least 0.05 ETH for transaction fees on the networks.
 
+> [!IMPORTANT]
+> Traditionally Substrate networks rely on Substrate-compatible keys to register node operators and manage staking.
+> The new Space and Time Testnet does not use Substrate keys. Stakers and Node operators will only use Ethereum keys in an Ethereum wallet.
+> Stakers and node operators will use their Ethereum keys to interact with Space and Time's Staking and Messaging contracts. Transactions that take place in these contracts will then be reflected on-chain.
+
 A validator node key is used to create a node's peer id in order to uniquely identify the node over the p2p network. We first create a folder where we want to store the node-key, then mount the folder into docker image and run the key generating command:
 
 ```bash
@@ -91,6 +104,23 @@ The generated key should now be in a file called `subkey.key` in the folder. Not
 ## SXT Chain Testnet: NPoS Staking Instructions
 
 ---
+
+### Validators
+Validators are the ones running the hardware that is creating blocks and participating in Consensus. Validators have their own stake in addition to anyone nominating them.
+
+### Nominators
+Nominators can allocate their stake towards an existing validator and participate in a portion of staking rewards without having to run their own hardware. In the event that a Validator is slashed for acting badly, the nominators will also be slashed. Nominators can nominate multiple validators.
+
+### Eras
+Every Era the elected set changes based on the distribution of stake from validators and nominators. Eras rotate every 24 hours.
+
+### Epochs
+Every Epoch new block slots are assigned to the previously elected validator set.
+
+### Elections
+Elections take place in the last block of the next-to-last Epoch. For example, SXT Chain has 24 Hour Eras consisting of six 4 hour long Epochs.
+At the last block of Epoch 5 in each era, the election will take place and keys for the new validators will be queued to become active at the start of the next Era.
+
 
 ### Testnet Contract Addresses (Sepolia):
 
