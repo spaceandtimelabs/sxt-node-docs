@@ -122,16 +122,16 @@ The generated key should now be in a file called `subkey.key` in the folder. Not
 
 ### Step 2: Approve Token Spend
 Send a transaction to the token contract to approve the staking contract to spend your test tokens:
-- [0x8A6BBaCBe0b3b9Ea00f80022318c0ad2E07a1fE4](https://sepolia.etherscan.io/address/0x8A6BBaCBe0b3b9Ea00f80022318c0ad2E07a1fE4)
+- [0xdB5FFD69Fa8022e20cf7d66C36c961a2949f4Da0](https://sepolia.etherscan.io/token/0xdb5ffd69fa8022e20cf7d66c36c961a2949f4da0#writeContract)
 - Send an `approve` transaction with:
-  - The **staking contract address** 0xdb3be8e4b966d189de54b8cf2e01ef387983dec3
-  - The **token limit** to approve
+  - The **staking contract address** 0x2FC562b02c9C0a2DfA814d807FF92b3F99468E10
+  - The **token limit** to approve `999999999999999999999999999`
   ![Etherscan Approval Transaction](./assets/approve.png)
 ---
 
 ### Step 3: Stake Tokens
-Stake your desired amount using the **staking contract**.
-- [0xdb3be8e4b966d189de54b8cf2e01ef387983dec3](https://sepolia.etherscan.io/address/0xdb3be8e4b966d189de54b8cf2e01ef387983dec3)
+Stake your desired amount, like `1000000` using the **staking contract**.
+- [0x2FC562b02c9C0a2DfA814d807FF92b3F99468E10](https://sepolia.etherscan.io/address/0x2fc562b02c9c0a2dfa814d807ff92b3f99468e10#writeContract)
   ![Etherscan Stake Transaction](./assets/stake.png)
 ---
 
@@ -221,6 +221,7 @@ docker run -d --restart always \
   --log info \
   --telemetry-url 'wss://telemetry.polkadot.io/submit/ 5' \
   --no-private-ipv4 \
+  --name ValidatorName
   # only do the following if local RPC is desired
   --rpc-external \
   --rpc-cors all \
