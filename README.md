@@ -204,6 +204,7 @@ docker run -d --restart always \
   -p 30333:30333/tcp \
   -p 9615:9615/tcp \
   -p 9944:9944/tcp \
+  --env HYPER_KZG_PUBLIC_SETUP_DIRECTORY=/data \
   ghcr.io/spaceandtimelabs/sxt-node:testnet-v0.93.0 \
   --base-path /data \
   --prometheus-port 9615 \
@@ -249,6 +250,8 @@ services:
       - sxt-validator-key:/key
       - sxt-node-key:/node-key
     pid: host
+    environment:
+      HYPER_KZG_PUBLIC_SETUP_DIRECTORY: /data
     command: >
       --base-path /data
       --prometheus-port 9615
