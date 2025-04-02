@@ -95,16 +95,14 @@ The generated key should now be in a file called `subkey.key` in the folder. Not
 ### Testnet Contract Addresses (Sepolia):
 
 - **Testnet Staking Contract**
-  [0xdb3be8e4b966d189de54b8cf2e01ef387983dec3](https://sepolia.etherscan.io/address/0xdb3be8e4b966d189de54b8cf2e01ef387983dec3)
+  [0x2FC562b02c9C0a2DfA814d807FF92b3F99468E10](https://sepolia.etherscan.io/address/0x2fc562b02c9c0a2dfa814d807ff92b3f99468e10#writeContract)
+
 
 - **Testnet Token Contract**
-  [0x8A6BBaCBe0b3b9Ea00f80022318c0ad2E07a1fE4](https://sepolia.etherscan.io/address/0x8A6BBaCBe0b3b9Ea00f80022318c0ad2E07a1fE4)
+  [0xdB5FFD69Fa8022e20cf7d66C36c961a2949f4Da0](https://sepolia.etherscan.io/token/0xdb5ffd69fa8022e20cf7d66c36c961a2949f4da0#writeContract)
 
 - **Testnet SessionKey Registration Contract**
-  [0x1a9C3b972Ff3a07253b86138fF0d2D0C5d1ffF17](https://sepolia.etherscan.io/address/0x1a9C3b972Ff3a07253b86138fF0d2D0C5d1ffF17#writeContract)
-
-- **Testnet Messaging Contract**
-  [0x1a9C3b972Ff3a07253b86138fF0d2D0C5d1ffF17](https://sepolia.etherscan.io/address/0x1a9C3b972Ff3a07253b86138fF0d2D0C5d1ffF17)
+  [0x82840556980bfbCc08e3e7c61AA44E1a4EAb5471](https://sepolia.etherscan.io/address/0x82840556980bfbcc08e3e7c61aa44e1a4eab5471#writeContract)
 
 ---
 
