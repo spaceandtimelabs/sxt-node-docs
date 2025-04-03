@@ -99,7 +99,19 @@ docker run -it --rm \
   key generate-node-key --chain /opt/chainspecs/testnet-spec.json --file /data/subkey.key
 ```
 
-The generated key should now be in a file called `subkey.key` in the folder. Note that from the command line output it should also show you the peer id of the node.
+The generated key should now be in a file called `subkey.key` in the sxt-node-key volume. Note that from the command line output it should also show you the peer id of the node.
+
+#### Validator Keys Permission Workaround
+A workaround to fix a permission issue in the sxt-validator-key volume needs to be applied as well. This will be fixed in a future release:
+```bash
+docker run -it --rm \
+  --platform linux/amd64 \
+  -v sxt-validator-key:/key \
+  --user root \
+  --entrypoint=chown \
+  ghcr.io/spaceandtimelabs/sxt-node:testnet-v0.93.0 \
+  -R sxtuser:sxtuser /key
+```
 
 ## SXT Chain Testnet: NPoS Staking Instructions
 
@@ -201,6 +213,20 @@ You’ll receive a response like:
 - Paste it into the `body` field of the **message transaction**.
 - This also triggers `validate()` to activate your node.
   ![Etherscan Register Keys Transaction](./assets/message.png)
+
+> [!IMPORTANT]
+> You might see the following error due to file permissions. If that's the case, follow these [workaround instructions](#validator-keys-permission-workaround):
+```
+{
+   "error" : {
+      "code" : 1040,
+      "message" : "Client error: Execution failed: Execution aborted due to trap: host code panicked while being called by the runtime: `sr25519_generate` failed: Other(\"Permission denied (os error 13)\")\nWASM backtrace:\nerror while executing at wasm backtrace:\n    0: 0x1a38d8 - sxt_runtime.wasm!sp_io::crypto::extern_host_function_impls::sr25519_generate::hd241fcbcc7fb892e\n    1: 0x58547a - sxt_runtime.wasm!sxt_runtime::opaque::SessionKeys::generate::hfa56532150c4f3a1\n    2: 0x4e21b0 - sxt_runtime.wasm!SessionKeys_generate_session_keys"
+   },
+   "id" : 1,
+   "jsonrpc" : "2.0"
+}
+```
+
 ---
 
 ## How to Nominate (Optional)
