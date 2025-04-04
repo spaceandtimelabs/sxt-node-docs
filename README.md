@@ -231,7 +231,7 @@ You’ll receive a response like:
 
 ## How to Nominate (Optional)
 
-You can nominate validators by submitting their **hexadecimal** for of the wallet address as it appears on Substrate to the staking contract. This can be found from the validator list and then converted from SS58 to Hexadecimal.
+This is an optional step; in order to nominate someone, they must be an active validator. You can nominate validators by submitting their **hexadecimal** form of the wallet address as it appears on Substrate to the staking contract. This can be found from the validator list and then converted from SS58 to Hexadecimal.
 
 In order to generate the hexadecimal value from the SS58 value, one can run the following commands:
 
@@ -242,8 +242,10 @@ docker run -it --rm \
   -v sxt-node-key:/data \
   --entrypoint=/usr/local/bin/sxt-node \
   ghcr.io/spaceandtimelabs/sxt-node:testnet-v0.93.0 \
-  key inspect --chain /opt/chainspecs/testnet-spec.json $SS58_KEY 
+  key inspect --chain /opt/chainspecs/testnet-spec.json $SS58_KEY
 ```
+
+The SS58_KEY can be obtained from the address list of validators in the [Staking Dashboard](https://polkadot.js.org/apps/?rpc=wss://new-rpc.testnet.sxt.network/#/staking)
 
 **You MUST use Hex format. Do NOT use SS58 format**:
 
