@@ -103,6 +103,9 @@ The generated key should now be in a file called `subkey.key` in the folder. Not
 
 ## SXT Chain Testnet: NPoS Staking Instructions
 
+> [!NOTE]
+> Please see the FAQ section at the end of this document if you have additional questions about onboarding as a validator
+
 ---
 
 ### Validators
@@ -200,9 +203,21 @@ You’ll receive a response like:
   ![Etherscan Register Keys Transaction](./assets/message.png)
 ---
 
-## How to Nominate
+## How to Nominate (Optional)
 
-You can nominate validators by submitting their **hexadecimal Ethereum-style address** to the staking contract.
+You can nominate validators by submitting their **hexadecimal** for of the wallet address as it appears on Substrate to the staking contract. This can be found from the validator list and then converted from SS58 to Hexadecimal.
+
+In order to generate the hexadecimal value from the SS58 value, one can run the following commands:
+
+```bash
+SS58_KEY=<The SS58 public wallet address of the validator you want to nominate>
+docker run -it --rm \
+  --platform linux/amd64 \
+  -v sxt-node-key:/data \
+  --entrypoint=/usr/local/bin/sxt-node \
+  ghcr.io/spaceandtimelabs/sxt-node:testnet-v0.93.0 \
+  key inspect --chain /opt/chainspecs/testnet-spec.json $SS58_KEY 
+```
 
 **You MUST use Hex format. Do NOT use SS58 format**:
 
@@ -319,3 +334,11 @@ and then start the sxt-testnet-node with command below:
 ```bash
 docker compose -f ./docker-compose.yaml up -d
 ```
+
+# FAQ (More Coming Soon)
+
+## Do I need to nominate my own validator?
+No you do not need to nominate yourself if you are a validator. Your validator node has its own stake tied to your account.
+
+## Where do I get the address if I do want to nominate someone else's validator?
+You can find the SS58 address of all available validators in the [Polkadot Explorer](https://polkadot.js.org/apps/?rpc=wss%3A%2F%2Fnew-rpc.testnet.sxt.network%2F#/explorer)
