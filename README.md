@@ -7,6 +7,15 @@
 * **Validator activities**: The SXT Chain is designed to witness and validate indexed data submitted by indexer nodes. While the current testnet phase only involves third-party validators (and not prover nodes quite yet), the SXT Chain ensures the integrity of data through cryptographic commitments—one special hash for each indexed table. As rows of data are inserted on the SXT Chain, the validators update these special hashes (commitments) and add them to each block. Ultimately, this proves/ensures that each table managed by the chain is cryptographically tamperproof.
 * **Data Integrity**: As the SXT Chain indexes data, it generates cryptographic hashes (commitments) that guarantee the underlying data tables remain untampered. These commitments are essential for later phases, where our SXT Chain prover nodes will employ our Proof of SQL protocol to validate the integrity of the indexed data during ZK-proven SQL execution for client queries.
 
+> [!IMPORTANT]
+> If you were a validator in the original SXT Testnet, you will need to start a new validator from scratch using the instructions below.
+
+## Noteworthy Mentions
+> [!IMPORTANT]
+> Traditionally Substrate networks rely on Substrate-compatible keys to register node operators and manage staking.
+> The new Space and Time Testnet does not use Substrate keys. Stakers and Node operators will only use Ethereum keys in an Ethereum wallet.
+> Stakers and node operators will use their Ethereum keys to interact with Space and Time's Staking and Messaging contracts. Transactions that take place in these contracts will then be reflected on-chain.
+
 ## I. Prerequisites
 
 #### Incentives and Expectations
@@ -25,15 +34,14 @@ You will only be able to access this channel list if you hold the “Testnet Nod
 ### 1.1. System Specifications
 The minimum system requirements for running a SXT validator node are shown in the table below:
 
-| Key | Value
-| --- | ---
-| CPU cores | 8
-| CPU Architecture | amd64
-| Memory (GiB) | 32
-| Storage (GiB) | 512
-| Storage Type | SSD
-| OS | Linux
-
+| Key              | Value |
+|------------------|-------|
+| CPU cores        | 8     |
+| CPU Architecture | amd64 |
+| Memory (GiB)     | 32    |
+| Storage (GiB)    | 512   |
+| Storage Type     | SSD   |
+| OS               | Linux |
 
 On Azure cloud, this is equivalent to SKU `Standard_D8as_v5` with storage SKU of `PremiumV2_SSD`.
 
@@ -75,6 +83,11 @@ Bootnodes on SXT networks are trusted peers on the network that a new node will 
 ### 1.4. Node Keys
 Because the SxT Chain relies on EVM contracts for staking, node operators will need an Ethereum wallet (or Sepolia for Testnet) to interact with the staking contracts. The wallet you're using should have at least 0.05 ETH for transaction fees on the networks.
 
+> [!IMPORTANT]
+> Traditionally Substrate networks rely on Substrate-compatible keys to register node operators and manage staking.
+> The new Space and Time Testnet does not use Substrate keys. Stakers and Node operators will only use Ethereum keys in an Ethereum wallet.
+> Stakers and node operators will use their Ethereum keys to interact with Space and Time's Staking and Messaging contracts. Transactions that take place in these contracts will then be reflected on-chain.
+
 A validator node key is used to create a node's peer id in order to uniquely identify the node over the p2p network. We first create a folder where we want to store the node-key, then mount the folder into docker image and run the key generating command:
 
 ```bash
@@ -86,11 +99,43 @@ docker run -it --rm \
   key generate-node-key --chain /opt/chainspecs/testnet-spec.json --file /data/subkey.key
 ```
 
-The generated key should now be in a file called `subkey.key` in the folder. Note that from the command line output it should also show you the peer id of the node.
+The generated key should now be in a file called `subkey.key` in the sxt-node-key volume. Note that from the command line output it should also show you the peer id of the node.
+
+#### Validator Keys Permission Workaround
+A workaround to fix a permission issue in the sxt-validator-key volume needs to be applied as well. This will be fixed in a future release:
+```bash
+docker run -it --rm \
+  --platform linux/amd64 \
+  -v sxt-validator-key:/key \
+  --user root \
+  --entrypoint=chown \
+  ghcr.io/spaceandtimelabs/sxt-node:testnet-v0.93.0 \
+  -R sxtuser:sxtuser /key
+```
 
 ## SXT Chain Testnet: NPoS Staking Instructions
 
+> [!NOTE]
+> Please see the FAQ section at the end of this document if you have additional questions about onboarding as a validator
+
 ---
+
+### Validators
+Validators are the ones running the hardware that is creating blocks and participating in Consensus. Validators have their own stake in addition to anyone nominating them.
+
+### Nominators
+Nominators can allocate their stake towards an existing validator and participate in a portion of staking rewards without having to run their own hardware. In the event that a Validator is slashed for acting badly, the nominators will also be slashed. Nominators can nominate multiple validators.
+
+### Eras
+Every Era the elected set changes based on the distribution of stake from validators and nominators. Eras rotate every 24 hours.
+
+### Epochs
+Every Epoch new block slots are assigned to the previously elected validator set.
+
+### Elections
+Elections take place in the last block of the next-to-last Epoch. For example, SXT Chain has 24 Hour Eras consisting of six 4 hour long Epochs.
+At the last block of Epoch 5 in each era, the election will take place and keys for the new validators will be queued to become active at the start of the next Era.
+
 
 ### Testnet Contract Addresses (Sepolia):
 
@@ -168,11 +213,39 @@ You’ll receive a response like:
 - Paste it into the `body` field of the **message transaction**.
 - This also triggers `validate()` to activate your node.
   ![Etherscan Register Keys Transaction](./assets/message.png)
+
+> [!IMPORTANT]
+> You might see the following error due to file permissions. If that's the case, follow these [workaround instructions](#validator-keys-permission-workaround):
+```
+{
+   "error" : {
+      "code" : 1040,
+      "message" : "Client error: Execution failed: Execution aborted due to trap: host code panicked while being called by the runtime: `sr25519_generate` failed: Other(\"Permission denied (os error 13)\")\nWASM backtrace:\nerror while executing at wasm backtrace:\n    0: 0x1a38d8 - sxt_runtime.wasm!sp_io::crypto::extern_host_function_impls::sr25519_generate::hd241fcbcc7fb892e\n    1: 0x58547a - sxt_runtime.wasm!sxt_runtime::opaque::SessionKeys::generate::hfa56532150c4f3a1\n    2: 0x4e21b0 - sxt_runtime.wasm!SessionKeys_generate_session_keys"
+   },
+   "id" : 1,
+   "jsonrpc" : "2.0"
+}
+```
+
 ---
 
-## How to Nominate
+## How to Nominate (Optional)
 
-You can nominate validators by submitting their **hexadecimal Ethereum-style address** to the staking contract.
+This is an optional step; in order to nominate someone, they must be an active validator. You can nominate validators by submitting their **hexadecimal** form of the wallet address as it appears on Substrate to the staking contract. This can be found from the validator list and then converted from SS58 to Hexadecimal.
+
+In order to generate the hexadecimal value from the SS58 value, one can run the following commands:
+
+```bash
+SS58_KEY=<The SS58 public wallet address of the validator you want to nominate>
+docker run -it --rm \
+  --platform linux/amd64 \
+  -v sxt-node-key:/data \
+  --entrypoint=/usr/local/bin/sxt-node \
+  ghcr.io/spaceandtimelabs/sxt-node:testnet-v0.93.0 \
+  key inspect --chain /opt/chainspecs/testnet-spec.json $SS58_KEY
+```
+
+The SS58_KEY can be obtained from the address list of validators in the [Staking Dashboard](https://polkadot.js.org/apps/?rpc=wss://new-rpc.testnet.sxt.network/#/staking)
 
 **You MUST use Hex format. Do NOT use SS58 format**:
 
@@ -289,3 +362,11 @@ and then start the sxt-testnet-node with command below:
 ```bash
 docker compose -f ./docker-compose.yaml up -d
 ```
+
+# FAQ (More Coming Soon)
+
+## Do I need to nominate my own validator?
+No you do not need to nominate yourself if you are a validator. Your validator node has its own stake tied to your account.
+
+## Where do I get the address if I do want to nominate someone else's validator?
+You can find the SS58 address of all available validators in the [Polkadot Explorer](https://polkadot.js.org/apps/?rpc=wss%3A%2F%2Fnew-rpc.testnet.sxt.network%2F#/explorer)
