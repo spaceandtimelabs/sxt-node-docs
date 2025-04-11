@@ -34,14 +34,15 @@ You will only be able to access this channel list if you hold the “Testnet Nod
 ### 1.1. System Specifications
 The minimum system requirements for running a SXT validator node are shown in the table below:
 
-| Key              | Value |
-|------------------|-------|
-| CPU cores        | 8     |
-| CPU Architecture | amd64 |
-| Memory (GiB)     | 32    |
-| Storage (GiB)    | 512   |
-| Storage Type     | SSD   |
-| OS               | Linux |
+| Key              | Value           |
+|------------------|-----------------|
+| CPU cores        | 16              |
+| CPU Architecture | amd64           |
+| Memory (GiB)     | 64              |
+| Storage (GiB)    | 512             |
+| Storage Type     | SSD             |
+| OS               | Linux           |
+| Network Speed    | 500Mbps up/down |
 
 On Azure cloud, this is equivalent to SKU `Standard_D8as_v5` with storage SKU of `PremiumV2_SSD`.
 
