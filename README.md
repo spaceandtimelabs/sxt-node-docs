@@ -22,7 +22,7 @@
 * **Participation Requirements**: Validators are expected to actively participate, with a response SLA of 48 hours for notifications around actions needed from validator operators, chain upgrades, changes to testing schedule, etc.
 * **Incentive Structure**: We may choose to provide rewards to eligible Testnet participants for completing certain activities, including running nodes, performing other critical services related to the SxT Chain, and meeting certain performance criteria or other requirements. Additional details will be provided to you from time to time via Testnet-related websites and developer documentation.
 
-**Discord information**: We have set up a Testnet Nodes channel in the SXT discord (https://discord.com/invite/spaceandtimeDB) to manage all communications and Q&A with node operators during testnet.
+**Discord information**: We have set up a Testnet Nodes channel in the SXT [Discord](https://discord.com/invite/spaceandtimeDB) to manage all communications and Q&A with node operators during testnet.
 
 ![image1](./assets/image1.png)
 
