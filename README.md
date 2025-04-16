@@ -34,14 +34,15 @@ You will only be able to access this channel list if you hold the “Testnet Nod
 ### 1.1. System Specifications
 The minimum system requirements for running a SXT validator node are shown in the table below:
 
-| Key              | Value |
-|------------------|-------|
-| CPU cores        | 8     |
-| CPU Architecture | amd64 |
-| Memory (GiB)     | 32    |
-| Storage (GiB)    | 512   |
-| Storage Type     | SSD   |
-| OS               | Linux |
+| Key              | Value           |
+|------------------|-----------------|
+| CPU cores        | 16              |
+| CPU Architecture | amd64           |
+| Memory (GiB)     | 64              |
+| Storage (GiB)    | 512             |
+| Storage Type     | SSD             |
+| OS               | Linux           |
+| Network Speed    | 500Mbps up/down |
 
 On Azure cloud, this is equivalent to SKU `Standard_D8as_v5` with storage SKU of `PremiumV2_SSD`.
 
@@ -140,7 +141,7 @@ At the last block of Epoch 5 in each era, the election will take place and keys 
 ### Testnet Contract Addresses (Sepolia):
 
 - **Testnet Staking Contract**
-  [0x2FC562b02c9C0a2DfA814d807FF92b3F99468E10](https://sepolia.etherscan.io/address/0x2fc562b02c9c0a2dfa814d807ff92b3f99468e10#writeContract)
+  [0xca755ce69181d2d33097a24ce5ddc030a0b87f2c](https://sepolia.etherscan.io/address/0xca755ce69181d2d33097a24ce5ddc030a0b87f2c#writeContract)
 
 
 - **Testnet Token Contract**
@@ -167,16 +168,16 @@ At the last block of Epoch 5 in each era, the election will take place and keys 
 
 ### Step 2: Approve Token Spend
 Send a transaction to the token contract to approve the staking contract to spend your test tokens:
-- [0xdB5FFD69Fa8022e20cf7d66C36c961a2949f4Da0](https://sepolia.etherscan.io/token/0xdb5ffd69fa8022e20cf7d66c36c961a2949f4da0#writeContract)
+- [0xdB5FFD69Fa8022e20cf7d66C36c961a2949f4Da0](https://sepolia.etherscan.io/address/0xdB5FFD69Fa8022e20cf7d66C36c961a2949f4Da0)
 - Send an `approve` transaction with:
-  - The **staking contract address** 0x2FC562b02c9C0a2DfA814d807FF92b3F99468E10
-  - The **token limit** to approve `999999999999999999999999999`
+  - The **staking contract address** 0xca755ce69181d2d33097a24ce5ddc030a0b87f2c
+  - The **token limit** to approve
   ![Etherscan Approval Transaction](./assets/approve.png)
 ---
 
 ### Step 3: Stake Tokens
-Stake your desired amount, like `1000000` using the **staking contract**.
-- [0x2FC562b02c9C0a2DfA814d807FF92b3F99468E10](https://sepolia.etherscan.io/address/0x2fc562b02c9c0a2dfa814d807ff92b3f99468e10#writeContract)
+Stake your desired amount using the **staking contract**. You must stake a minimum of 100 SXT or 100000000000000000000 units
+- [0xca755ce69181d2d33097a24ce5ddc030a0b87f2c](https://sepolia.etherscan.io/address/0xca755ce69181d2d33097a24ce5ddc030a0b87f2c)
   ![Etherscan Stake Transaction](./assets/stake.png)
 ---
 
@@ -241,8 +242,8 @@ docker run -it --rm \
   --platform linux/amd64 \
   -v sxt-node-key:/data \
   --entrypoint=/usr/local/bin/sxt-node \
-  ghcr.io/spaceandtimelabs/sxt-node:testnet-v0.93.0 \
-  key inspect --chain /opt/chainspecs/testnet-spec.json $SS58_KEY
+  ghcr.io/spaceandtimelabs/sxt-node:testnet-v0.107.0 \
+  key inspect --chain /opt/chainspecs/testnet-spec.json $SS58_KEY 
 ```
 
 The SS58_KEY can be obtained from the address list of validators in the [Staking Dashboard](https://polkadot.js.org/apps/?rpc=wss://new-rpc.testnet.sxt.network/#/staking)
@@ -278,7 +279,7 @@ docker run -d --restart always \
   -p 9615:9615/tcp \
   -p 9944:9944/tcp \
   --env HYPER_KZG_PUBLIC_SETUP_DIRECTORY=/data \
-  ghcr.io/spaceandtimelabs/sxt-node:testnet-v0.93.0 \
+  ghcr.io/spaceandtimelabs/sxt-node:testnet-v0.107.0 \
   --base-path /data \
   --prometheus-port 9615 \
   --prometheus-external \
@@ -313,7 +314,7 @@ services:
   sxt-testnet:
     platform: linux/amd64
     restart: unless-stopped
-    image: ghcr.io/spaceandtimelabs/sxt-node:testnet-v0.93.0
+    image: ghcr.io/spaceandtimelabs/sxt-node:testnet-v0.107.0
     ports:
       - '9615:9615' # metrics
       - '9944:9944' # rpc
