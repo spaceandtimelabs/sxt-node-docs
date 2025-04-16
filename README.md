@@ -51,14 +51,14 @@ On Azure cloud, this is equivalent to SKU `Standard_D8as_v5` with storage SKU of
 Assuming Docker Desktop is installed and working on your computer. The SXT Node Docker image can be downloaded with `docker pull` command.
 
 ```bash
-docker pull ghcr.io/spaceandtimelabs/sxt-node:testnet-v0.93.0
-docker images --digests ghcr.io/spaceandtimelabs/sxt-node:testnet-v0.93.0
+docker pull ghcr.io/spaceandtimelabs/sxt-node:testnet-v0.107.0
+docker images --digests ghcr.io/spaceandtimelabs/sxt-node:testnet-v0.107.0
 ```
 
 When each new docker image is released we will also be sharing the full `sha256` hash of the image. Please confirm that hash against the image pulled down by docker with an extra docker `images` argument `--digests` to make sure that you are pulling the right one.
 
 > [!NOTE]
-> Note: While the above references the `sxt-node:testnet-v0.93.0` docker image, this will change; please reference the "Resources" channel in the Testnet Nodes section of the [SXT Discord](https://discord.gg/spaceandtimeDB) or this [GitHub repository](https://github.com/orgs/spaceandtimelabs/packages/container/package/sxt-node) for the latest docker image.
+> Note: While the above references the `sxt-node:testnet-v0.107.0` docker image, this will change; please reference the "Resources" channel in the Testnet Nodes section of the [SXT Discord](https://discord.gg/spaceandtimeDB) or this [GitHub repository](https://github.com/orgs/spaceandtimelabs/packages/container/package/sxt-node) for the latest docker image.
 
 #### 1.2.2. Testnet Chainspecs
 SXT testnet chainspecs are part of the docker images mentioned in [section 1.2.1](#121-docker-image). To inspect the chainspecs that come with the docker image, please run the following:
@@ -66,12 +66,12 @@ SXT testnet chainspecs are part of the docker images mentioned in [section 1.2.1
 ```bash
 docker run -it --rm \
   --platform linux/amd64 \
-  --entrypoint=bash ghcr.io/spaceandtimelabs/sxt-node:testnet-v0.93.0 \
+  --entrypoint=bash ghcr.io/spaceandtimelabs/sxt-node:testnet-v0.107.0 \
   -c "cat /opt/chainspecs/testnet-spec.json"
 ```
 
 > [!NOTE]
-> Note: While the above references the `sxt-node:testnet-v0.93.0` docker image, this will change; please reference the "Resources" channel in the Testnet Nodes section of the [SXT Discord](https://discord.gg/spaceandtimeDB) or this [GitHub repository](https://github.com/orgs/spaceandtimelabs/packages/container/package/sxt-node) for the latest docker image.
+> Note: While the above references the `sxt-node:testnet-v0.107.0` docker image, this will change; please reference the "Resources" channel in the Testnet Nodes section of the [SXT Discord](https://discord.gg/spaceandtimeDB) or this [GitHub repository](https://github.com/orgs/spaceandtimelabs/packages/container/package/sxt-node) for the latest docker image.
 
 ### 1.3. Testnet Bootnodes
 Bootnodes on SXT networks are trusted peers on the network that a new node will first connect to and find more peers to download blocks from. The three bootnodes listed below are hosted by Space and Time:
@@ -96,7 +96,7 @@ docker run -it --rm \
   --platform linux/amd64 \
   -v sxt-node-key:/data \
   --entrypoint=/usr/local/bin/sxt-node \
-  ghcr.io/spaceandtimelabs/sxt-node:testnet-v0.93.0 \
+  ghcr.io/spaceandtimelabs/sxt-node:testnet-v0.107.0 \
   key generate-node-key --chain /opt/chainspecs/testnet-spec.json --file /data/subkey.key
 ```
 
@@ -110,7 +110,7 @@ docker run -it --rm \
   -v sxt-validator-key:/key \
   --user root \
   --entrypoint=chown \
-  ghcr.io/spaceandtimelabs/sxt-node:testnet-v0.93.0 \
+  ghcr.io/spaceandtimelabs/sxt-node:testnet-v0.107.0 \
   -R sxtuser:sxtuser /key
 ```
 
