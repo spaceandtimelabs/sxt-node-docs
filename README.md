@@ -18,6 +18,16 @@
 
 ## I. Prerequisites
 
+#### Request Testnet Tokens
+- Send your Sepolia ETH address in an email to the sxt foundation.
+  - NOTE: This must be different per validator that you are running
+  - NOTE: To ensure that this is not a dead wallet, we will be checking that at least one transaciton has been submitted through this wallet
+```yaml
+  to: readiness@sxt.foundation
+  subject: [NOP name] - Testnet Sepolia ETH Wallet Address
+```
+- The given address will receive 100 tokens which can be used to start staking
+  
 #### Incentives and Expectations
 * **Participation Requirements**: Validators are expected to actively participate, with a response SLA of 48 hours for notifications around actions needed from validator operators, chain upgrades, changes to testing schedule, etc.
 * **Incentive Structure**: We may choose to provide rewards to eligible Testnet participants for completing certain activities, including running nodes, performing other critical services related to the SxT Chain, and meeting certain performance criteria or other requirements. Additional details will be provided to you from time to time via Testnet-related websites and developer documentation.
@@ -243,18 +253,7 @@ At the last block of Epoch 5 in each era, the election will take place and keys 
 
 ## Steps
 
-### Step 1: Request Testnet Tokens
-- Send your Sepolia ETH address in an email to the sxt foundation.
-  - NOTE: This must be different per validator that you are running
-  - NOTE: To ensure that this is not a dead wallet, we will be checking that at least one transaciton has been submitted through this wallet
-```yaml
-  to: readiness@sxt.foundation
-  subject: [NOP name] - Testnet Sepolia ETH Wallet Address
-```
-- The given address will receive 100 tokens which can be used to start staking
----
-
-### Step 2: Approve Token Spend
+### Step 1: Approve Token Spend
 Send a transaction to the token contract to approve the staking contract to spend your test tokens:
 - [0xC768a8F94dcb61a200C9d9B2adbe50B41A80B839](https://sepolia.etherscan.io/address/0xC768a8F94dcb61a200C9d9B2adbe50B41A80B839) (SpaceAndTime)
 - Send an `approve` transaction with:
@@ -263,7 +262,7 @@ Send a transaction to the token contract to approve the staking contract to spen
   ![Etherscan Approval Transaction](./assets/approve.png)
 ---
 
-### Step 3: Stake Tokens
+### Step 2: Stake Tokens
 Stake your desired amount using the **staking contract**. You must stake a minimum of 100 SXT or 100000000000000000000 units
 - [0x7B3cBAaFE8Ff3cbf4553893fdcaD8d5c46DB90Ab](https://sepolia.etherscan.io/address/0x7B3cBAaFE8Ff3cbf4553893fdcaD8d5c46DB90Ab) (Staking)
   ![Etherscan Stake Transaction](./assets/stake.png)
